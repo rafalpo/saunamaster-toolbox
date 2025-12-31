@@ -1,0 +1,57 @@
+stages:
+  - test
+  - build_image
+
+test_fe:
+  stage: test
+  image: node:20
+  before_script:
+    - cd frontend
+  script:
+    - echo "Running frontend tests..."
+    - npm install
+    - npm run lint
+
+test_be:
+  stage: test
+  image: maven:3.9.10-eclipse-temurin-21
+  before_script:  
+    - cd backend
+  script:
+    - mvn clean test
+
+build_backend:
+  stage: build_image
+  image: quay.io/buildah/stable:latest
+  before_script:
+    - cd backend
+    - buildah login -u $NEXUS_USER -p $NEXUS_PASS $REGISTRY_URL
+    - buildah pull $REGISTRY_URL/saunamaster_toolbox_backend:latest || true
+  script:
+    - |
+      buildah bud \
+      -f Dockerfile \
+      --cache-from $REGISTRY_URL/saunamaster_toolbox_backend \
+      -t $REGISTRY_URL/saunamaster_toolbox_backend:$CI_COMMIT_SHORT_SHA \
+      -t $REGISTRY_URL/saunamaster_toolbox_backend:latest \
+      .
+    - buildah push $REGISTRY_URL/saunamaster_toolbox_backend:latest
+    - buildah push $REGISTRY_URL/saunamaster_toolbox_backend:$CI_COMMIT_SHORT_SHA
+
+build_frontend:
+  stage: build_image
+  image: quay.io/buildah/stable:latest
+  before_script:
+    - cd frontend
+    - buildah login -u $NEXUS_USER -p $NEXUS_PASS $REGISTRY_URL
+    - buildah pull $REGISTRY_URL/saunamaster_toolbox_frontend:latest || true
+  script:
+    - |
+      buildah bud \
+      -f Dockerfile \
+      --cache-from $REGISTRY_URL/saunamaster_toolbox_frontend \
+      -t $REGISTRY_URL/saunamaster_toolbox_frontend:$CI_COMMIT_SHORT_SHA \
+      -t $REGISTRY_URL/saunamaster_toolbox_frontend:latest \
+      .
+    - buildah push $REGISTRY_URL/saunamaster_toolbox_frontend:latest
+    - buildah push $REGISTRY_URL/saunamaster_toolbox_frontend:$CI_COMMIT_SHORT_SHA
