@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-item-table
+      author: rafalpo
+      changes:
+        - createTable:
+            tableName: item
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shelf_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: FK_SHELF_ID
+                    referencedTableName: shelf
+                    referencedColumnNames: id
