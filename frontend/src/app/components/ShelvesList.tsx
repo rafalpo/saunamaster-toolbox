@@ -25,6 +25,12 @@ export default function ShelvesList({ onSelectShelf, activeShelfId }: ShelvesLis
         setIsFormOpen(true);
     };
 
+    const handleDeleteShelf = (shelf: ShelfResponse) => {
+        if (confirm(`Czy na pewno chcesz usunąć ${shelf.name}?`)) {
+            shelves.deleteShelf(shelf.id);
+        }
+    };
+
     return (
         <>
             {isFormOpen && (
@@ -80,7 +86,7 @@ export default function ShelvesList({ onSelectShelf, activeShelfId }: ShelvesLis
                                     <button onClick={() => handleEditShelf(shelf)} className="p-1.5 hover:bg-zinc-300 dark:hover:bg-zinc-700 rounded-md text-zinc-600 dark:text-zinc-400" title="Edytuj">
                                         <Pencil size={14} />
                                     </button>
-                                    <button onClick={() => shelves.deleteShelf(shelf.id)} className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md text-red-600" title="Usuń">
+                                    <button onClick={() => handleDeleteShelf(shelf)} className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md text-red-600" title="Usuń">
                                         <Trash2 size={14} />
                                     </button>
                                 </div>

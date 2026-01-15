@@ -26,6 +26,12 @@ export default function ItemsList({ shelfId, activeItemId, onSelectItem }: Items
         setIsFormOpen(true);
     };
 
+    const handleDeleteItem = (item: ItemResponse) => {
+        if (confirm(`Czy na pewno chcesz usunąć ${item.name}?`)) {
+            items.deleteItem(item.id);
+        }
+    };
+
     return (
         <>
             {isFormOpen && (
@@ -77,7 +83,7 @@ export default function ItemsList({ shelfId, activeItemId, onSelectItem }: Items
                                     <button onClick={() => handleEditItem(item)} className="p-1.5 hover:bg-white/50 dark:hover:bg-zinc-700 rounded-md text-zinc-600" title="Edytuj">
                                         <Pencil size={14} />
                                     </button>
-                                    <button onClick={() => items.deleteItem(item.id)} className="p-1.5 hover:bg-red-100 rounded-md text-red-600" title="Usuń">
+                                    <button onClick={() => handleDeleteItem(item)} className="p-1.5 hover:bg-red-100 rounded-md text-red-600" title="Usuń">
                                         <Trash2 size={14} />
                                     </button>
                                 </div>
