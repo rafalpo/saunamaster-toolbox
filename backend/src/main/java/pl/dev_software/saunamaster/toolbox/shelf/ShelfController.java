@@ -1,14 +1,13 @@
 package pl.dev_software.saunamaster.toolbox.shelf;
 
+import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
-import pl.dev_software.saunamaster.toolbox.dto.ErrorDTO;
 import pl.dev_software.saunamaster.toolbox.dto.ShelfSummaryDTO;
 import pl.dev_software.saunamaster.toolbox.exception.ShelfNotFoundException;
 import pl.dev_software.saunamaster.toolbox.exception.ShelfValidationException;
@@ -68,8 +67,9 @@ public class ShelfController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteShelf(@PathVariable("id") UUID id) {
-        Shelf existingShelf = shelfRepository.findById(id)
+        Shelf existingShelf = shelfRepository.findByIdWithItems(id)
                 .orElseThrow(() -> new ShelfNotFoundException(id));
+
         shelfRepository.delete(existingShelf);
     }
 

@@ -2,6 +2,7 @@ package pl.dev_software.saunamaster.toolbox.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -16,10 +17,12 @@ public class Item {
     private UUID id;
 
     @Column(nullable = false)
+    @EqualsAndHashCode.Exclude
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shelf_id")
+    @EqualsAndHashCode.Exclude
     private Shelf shelf;
 
 }

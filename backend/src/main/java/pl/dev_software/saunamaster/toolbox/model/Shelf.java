@@ -2,10 +2,11 @@ package pl.dev_software.saunamaster.toolbox.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Data
@@ -17,10 +18,11 @@ public class Shelf {
     private UUID id;
 
     @Column(nullable = false)
+    @EqualsAndHashCode.Exclude
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelf_id")
-    private Set<Item> items;
+    @OneToMany(mappedBy = "shelf", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<Item> items = new HashSet<>();
 
 }
