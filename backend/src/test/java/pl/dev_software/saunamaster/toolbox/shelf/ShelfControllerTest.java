@@ -159,10 +159,25 @@ public class ShelfControllerTest {
     }
 
     @Test
-    public void shouldDeleteShelf() {
+    public void shouldDeleteShelfWithNoItems() {
         // Arrange
         UUID shelfId = UUID.randomUUID();
         Shelf existingShelf = ShelfFixture.aShelfWithRandomName();
+        when(shelfRepository.findById(shelfId)).thenReturn(Optional.of(existingShelf));
+
+        // Act
+        shelfController.deleteShelf(shelfId);
+
+        // Assert
+        verify(shelfRepository, atMostOnce()).findById(shelfId);
+        verify(shelfRepository, atMostOnce()).delete(existingShelf);
+    }
+
+    @Test
+    public void shouldDeleteShelfWithItems() {
+        // Arrange
+        UUID shelfId = UUID.randomUUID();
+        Shelf existingShelf = ShelfFixture.aShelfWithItems(5);
         when(shelfRepository.findById(shelfId)).thenReturn(Optional.of(existingShelf));
 
         // Act

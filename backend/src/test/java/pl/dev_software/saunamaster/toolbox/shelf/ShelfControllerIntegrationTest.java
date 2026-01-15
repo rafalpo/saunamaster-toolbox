@@ -267,7 +267,7 @@ class ShelfControllerIntegrationTest {
     }
 
     @Test
-    public void shouldDeleteSingleShelf() throws Exception {
+    public void shouldDeleteSingleShelfWithNoItems() throws Exception {
         // Arrange
         Shelf shelf = shelfRepository.save(ShelfFixture.aShelfWithRandomName());
 
@@ -276,6 +276,21 @@ class ShelfControllerIntegrationTest {
                         delete("/shelves/{id}", shelf.getId())
                 )
                 .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/shelves/{id}", shelf.getId()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldDeleteSingleShelfWithItems() throws Exception {
+        // Arrange
+        Shelf shelf = shelfRepository.save(ShelfFixture.aShelfWithItems(5));
+
+        // Act & Assert
+        mockMvc.perform(
+                delete("/shelves/{id}", shelf.getId())
+        )
+        .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/shelves/{id}", shelf.getId()))
                 .andExpect(status().isNotFound());
