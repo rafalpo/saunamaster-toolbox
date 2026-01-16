@@ -25,6 +25,7 @@ export const useItems = (shelfId: string, page: number = 0, limit: number = 25) 
         mutationFn: (data: { name: string }) => api.post(`/shelves/${shelfId}/items`, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['items', shelfId] });
+            queryClient.invalidateQueries({ queryKey: ['shelves'] });
         }
     });
 
@@ -39,6 +40,7 @@ export const useItems = (shelfId: string, page: number = 0, limit: number = 25) 
         mutationFn: (id: string) => api.delete(`/shelves/${shelfId}/items/${id}`),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['items', shelfId] });
+            queryClient.invalidateQueries({ queryKey: ['shelves'] });
         }
     });
 

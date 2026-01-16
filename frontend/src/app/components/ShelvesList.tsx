@@ -6,7 +6,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 import ShelfForm from "./ShelfForm";
 
 interface ShelvesListProps {
-    onSelectShelf: (id: string) => void;
+    onSelectShelf: (id: string|undefined) => void;
     activeShelfId?: string;
 }
 
@@ -28,6 +28,7 @@ export default function ShelvesList({ onSelectShelf, activeShelfId }: ShelvesLis
     const handleDeleteShelf = (shelf: ShelfResponse) => {
         if (confirm(`Czy na pewno chcesz usunąć ${shelf.name}?`)) {
             shelves.deleteShelf(shelf.id);
+            onSelectShelf(undefined);
         }
     };
 
