@@ -17,7 +17,6 @@ public class Item {
     private UUID id;
 
     @Column(nullable = false)
-    @EqualsAndHashCode.Exclude
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

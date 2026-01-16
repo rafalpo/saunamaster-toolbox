@@ -18,7 +18,6 @@ public class Shelf {
     private UUID id;
 
     @Column(nullable = false)
-    @EqualsAndHashCode.Exclude
     private String name;
 
     @OneToMany(mappedBy = "shelf", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

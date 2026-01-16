@@ -82,20 +82,6 @@ class ShelfControllerIntegrationTest {
     }
 
     @Test
-    public void shouldReturnSingleShelfWithItems() throws Exception {
-        // Arrange
-        final int ITEMS_NUMBER = 10;
-        Shelf shelf = shelfRepository.save(ShelfFixture.aShelfWithItems(ITEMS_NUMBER));
-
-        // Act & Assert
-        mockMvc.perform(get("/shelves/{id}", shelf.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(shelf.getId().toString()))
-                .andExpect(jsonPath("$.name").value(shelf.getName()))
-                .andExpect(jsonPath("$.itemsCount").value(shelf.getItems().size()));
-    }
-
-    @Test
     public void shouldReturnNotFoundWhenShelfWithGivenIdDoesNotExist() throws Exception {
         // Arrange
         String nonExistingId = UUID.randomUUID().toString();

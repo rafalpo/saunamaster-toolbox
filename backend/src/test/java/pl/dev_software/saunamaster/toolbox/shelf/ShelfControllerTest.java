@@ -163,13 +163,13 @@ public class ShelfControllerTest {
         // Arrange
         UUID shelfId = UUID.randomUUID();
         Shelf existingShelf = ShelfFixture.aShelfWithRandomName();
-        when(shelfRepository.findById(shelfId)).thenReturn(Optional.of(existingShelf));
+        when(shelfRepository.findByIdWithItems(shelfId)).thenReturn(Optional.of(existingShelf));
 
         // Act
         shelfController.deleteShelf(shelfId);
 
         // Assert
-        verify(shelfRepository, atMostOnce()).findById(shelfId);
+        verify(shelfRepository, atMostOnce()).findByIdWithItems(shelfId);
         verify(shelfRepository, atMostOnce()).delete(existingShelf);
     }
 
@@ -178,13 +178,13 @@ public class ShelfControllerTest {
         // Arrange
         UUID shelfId = UUID.randomUUID();
         Shelf existingShelf = ShelfFixture.aShelfWithItems(5);
-        when(shelfRepository.findById(shelfId)).thenReturn(Optional.of(existingShelf));
+        when(shelfRepository.findByIdWithItems(shelfId)).thenReturn(Optional.of(existingShelf));
 
         // Act
         shelfController.deleteShelf(shelfId);
 
         // Assert
-        verify(shelfRepository, atMostOnce()).findById(shelfId);
+        verify(shelfRepository, atMostOnce()).findByIdWithItems(shelfId);
         verify(shelfRepository, atMostOnce()).delete(existingShelf);
     }
 
@@ -192,7 +192,7 @@ public class ShelfControllerTest {
     public void shouldThrowExceptionWhenDeletingNonExistingShelf() {
         // Arrange
         UUID shelfId = UUID.randomUUID();
-        when(shelfRepository.findById(shelfId)).thenReturn(Optional.empty());
+        when(shelfRepository.findByIdWithItems(shelfId)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(ShelfNotFoundException.class, () -> {
