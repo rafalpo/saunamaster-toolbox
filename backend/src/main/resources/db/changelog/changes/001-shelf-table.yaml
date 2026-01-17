@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-shelf-table
+      author: rafalpo
+      changes:
+        - createTable:
+            tableName: shelf
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    unique: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false

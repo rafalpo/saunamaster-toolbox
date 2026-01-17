@@ -17,14 +17,14 @@
 ## Milestone 2: Inventory Foundation (The Shelf)
 - **Goal**: Manage individual items on "The Shelf".
 - **Tasks**:
-  - [ ] Implement data model for Resources (CRUD).
-  - [ ] Create UI for browsing and adding items.
-  - [ ] Setup database migrations.
+  - [x] Implement data model for Resources (CRUD).
+  - [x] Create UI for browsing and adding items.
+  - [x] Setup database migrations.
 - **Definition of Done (DoD)**:
-  - [ ] New items can be added via UI and are persisted in the database.
-  - [ ] Repository layer integration tests are passing.
-  - [ ] Data validation prevents empty or corrupt entries.
-  - [ ] **Deployment**: Updated and tested on the cluster.
+  - [x] New items can be added via UI and are persisted in the database.
+  - [x] Repository layer integration tests are passing.
+  - [x] Data validation prevents empty or corrupt entries.
+  - [x] **Deployment**: Updated and tested on the cluster.
 
 ---
 
