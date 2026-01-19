@@ -21,7 +21,7 @@ public class Item {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shelf_id")
     @EqualsAndHashCode.Exclude
     private Shelf shelf;

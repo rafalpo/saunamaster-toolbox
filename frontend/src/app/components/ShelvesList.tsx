@@ -29,7 +29,9 @@ export default function ShelvesList({ onSelectShelf, activeShelfId }: ShelvesLis
     const handleDeleteShelf = (shelf: ShelfResponse) => {
         if (confirm(`Czy na pewno chcesz usunąć ${shelf.name}?`)) {
             shelves.deleteShelf(shelf.id);
-            onSelectShelf(undefined);
+            if (activeShelfId === shelf.id) {
+                onSelectShelf(undefined);
+            }
         }
     };
 
