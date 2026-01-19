@@ -5,13 +5,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
-public class Item {
+public class UsageFact {
 
     @Id
     @UuidGenerator
@@ -19,15 +18,11 @@ public class Item {
     private UUID id;
 
     @Column(nullable = false)
-    private String name;
+    private LocalDateTime usageTime;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelf_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
     @EqualsAndHashCode.Exclude
-    private Shelf shelf;
-
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    private Set<UsageFact> usageFacts = new HashSet<>();
+    private Item item;
 
 }

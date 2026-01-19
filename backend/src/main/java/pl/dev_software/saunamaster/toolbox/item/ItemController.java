@@ -6,15 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.dev_software.saunamaster.toolbox.dto.ErrorDTO;
 import pl.dev_software.saunamaster.toolbox.dto.ItemSummaryDTO;
+import pl.dev_software.saunamaster.toolbox.dto.UsageFactDTO;
 import pl.dev_software.saunamaster.toolbox.exception.ItemNotFoundException;
 import pl.dev_software.saunamaster.toolbox.exception.ItemValidationException;
 import pl.dev_software.saunamaster.toolbox.exception.ShelfNotFoundException;
 import pl.dev_software.saunamaster.toolbox.model.Item;
 import pl.dev_software.saunamaster.toolbox.model.Shelf;
+import pl.dev_software.saunamaster.toolbox.model.UsageFact;
 import pl.dev_software.saunamaster.toolbox.shelf.ShelfRepository;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RequestMapping("/shelves/{shelfId}/items")
@@ -23,10 +25,12 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final ShelfRepository shelfRepository;
+    private final UsageFactRepository usageFactRepository;
 
-    public ItemController(ItemRepository itemRepository, ShelfRepository shelfRepository) {
+    public ItemController(ItemRepository itemRepository, ShelfRepository shelfRepository, UsageFactRepository usageFactRepository) {
         this.itemRepository = itemRepository;
         this.shelfRepository = shelfRepository;
+        this.usageFactRepository = usageFactRepository;
     }
 
     @GetMapping
@@ -74,12 +78,29 @@ public class ItemController {
     @DeleteMapping("/{itemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeItemFromShelf(@PathVariable("shelfId") UUID shelfId, @PathVariable("itemId") UUID itemId) {
-        Item existingItem = itemRepository.findById(itemId)
+        Item existingItem = itemRepository.findByIdWithAllUsageFacts(itemId)
             .orElseThrow(() -> new ItemNotFoundException(shelfId, itemId));
         if (!existingItem.getShelf().getId().equals(shelfId)) {
             throw new ItemNotFoundException(shelfId, itemId);
         }
         itemRepository.delete(existingItem);
+    }
+
+    @GetMapping("/{itemId}/usage-facts")
+    public Page<UsageFactDTO> getAllUsageFacts(@PathVariable("shelfId") UUID shelfId, @PathVariable("itemId") UUID itemId, Pageable pageable) {
+        return usageFactRepository.findAllByShelfIdAndItemId(shelfId, itemId, pageable);
+    }
+
+    @PostMapping("/{itemId}/usage-facts")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addUsageFact(@PathVariable("shelfId") UUID shelfId, @PathVariable("itemId") UUID itemId) {
+        Item existingItem = itemRepository.findByIdWithAllUsageFacts(itemId)
+                .orElseThrow(() -> new ItemNotFoundException(shelfId, itemId));
+        UsageFact usageFact = new UsageFact();
+        usageFact.setItem(existingItem);
+        usageFact.setUsageTime(LocalDateTime.now());
+        existingItem.getUsageFacts().add(usageFact);
+        itemRepository.saveAndFlush(existingItem);
     }
 
 }

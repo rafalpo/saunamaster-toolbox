@@ -35,4 +35,16 @@ public class ItemFixture {
         }
         return items;
     }
+
+    public static Item anItemWithUsageFacts(int totalUsageFacts) {
+        Item item = anItem();
+        Set<UsageFact> usageFacts = new HashSet<>();
+        for (int i = 0; i < totalUsageFacts; i++) {
+            UsageFact usageFact = new UsageFact();
+            usageFact.setItem(item);
+            usageFacts.add(usageFact);
+        }
+        item.setUsageFacts(usageFacts);
+        return item;
+    }
 }
