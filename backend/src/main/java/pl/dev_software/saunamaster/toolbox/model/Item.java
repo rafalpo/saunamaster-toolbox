@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -23,5 +25,9 @@ public class Item {
     @JoinColumn(name = "shelf_id")
     @EqualsAndHashCode.Exclude
     private Shelf shelf;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private Set<UsageFact> usageFacts = new HashSet<>();
 
 }

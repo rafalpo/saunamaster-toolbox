@@ -8,8 +8,8 @@ import ItemListEntry from "./ItemListEntry";
 
 interface ItemsListProps {
     shelfId: string;
-    activeItemId?: string;
-    onSelectItem?: (id: string) => void;
+    activeItemId: string | undefined;
+    onSelectItem: (id: string | undefined) => void;
 }
 
 export default function ItemsList({ shelfId, activeItemId, onSelectItem }: ItemsListProps) {
@@ -30,6 +30,9 @@ export default function ItemsList({ shelfId, activeItemId, onSelectItem }: Items
     const handleDeleteItem = (item: ItemResponse) => {
         if (confirm(`Czy na pewno chcesz usunąć ${item.name}?`)) {
             items.deleteItem(item.id);
+            if (activeItemId === item.id) {
+                onSelectItem(undefined);
+            }
         }
     };
 

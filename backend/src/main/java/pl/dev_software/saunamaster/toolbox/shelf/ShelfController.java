@@ -1,6 +1,5 @@
 package pl.dev_software.saunamaster.toolbox.shelf;
 
-import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

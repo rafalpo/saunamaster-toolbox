@@ -53,7 +53,7 @@ public class ItemControllerTest {
         // Arrange
         UUID shelfId = UUID.randomUUID();
         UUID itemId = UUID.randomUUID();
-        ItemSummaryDTO itemSummaryDTO = new ItemSummaryDTO(itemId, "Test Item");
+        ItemSummaryDTO itemSummaryDTO = new ItemSummaryDTO(itemId, "Test Item", 0L);
         when(itemRepository.findByShelfIdAndItemId(shelfId, itemId)).thenReturn(Optional.of(itemSummaryDTO));
 
         // Act
@@ -239,13 +239,34 @@ public class ItemControllerTest {
         shelf.setId(shelfId);
         existingItem.setShelf(shelf);
 
-        when(itemRepository.findById(itemId)).thenReturn(Optional.of(existingItem));
+        when(itemRepository.findByIdWithAllUsageFacts(itemId)).thenReturn(Optional.of(existingItem));
 
         // Act
         itemController.removeItemFromShelf(shelfId, itemId);
 
         // Assert
-        verify(itemRepository, atMostOnce()).findById(itemId);
+        verify(itemRepository, atMostOnce()).findByIdWithAllUsageFacts(itemId);
+        verify(itemRepository, atMostOnce()).delete(existingItem);
+    }
+
+    @Test
+    public void shouldDeleteItemWithUsageFactsWhenItBelongsToShelf() {
+        // Arrange
+        UUID shelfId = UUID.randomUUID();
+        UUID itemId = UUID.randomUUID();
+        Item existingItem = ItemFixture.anItemWithUsageFacts(5);
+        existingItem.setId(itemId);
+        Shelf shelf = ShelfFixture.aShelfWithRandomName();
+        shelf.setId(shelfId);
+        existingItem.setShelf(shelf);
+
+        when(itemRepository.findByIdWithAllUsageFacts(itemId)).thenReturn(Optional.of(existingItem));
+
+        // Act
+        itemController.removeItemFromShelf(shelfId, itemId);
+
+        // Assert
+        verify(itemRepository, atMostOnce()).findByIdWithAllUsageFacts(itemId);
         verify(itemRepository, atMostOnce()).delete(existingItem);
     }
 
@@ -260,13 +281,13 @@ public class ItemControllerTest {
         differentShelf.setId(UUID.randomUUID());
         existingItem.setShelf(differentShelf);
 
-        when(itemRepository.findById(itemId)).thenReturn(Optional.of(existingItem));
+        when(itemRepository.findByIdWithAllUsageFacts(itemId)).thenReturn(Optional.of(existingItem));
 
         // Act & Assert
         assertThrows(ItemNotFoundException.class, () -> {
             itemController.removeItemFromShelf(shelfId, itemId);
         });
-        verify(itemRepository, atMostOnce()).findById(itemId);
+        verify(itemRepository, atMostOnce()).findByIdWithAllUsageFacts(itemId);
         verify(itemRepository, never()).delete(any(Item.class));
     }
 

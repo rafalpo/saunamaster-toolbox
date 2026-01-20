@@ -31,14 +31,14 @@
 ## Milestone 3: Event Logging (The Usage Fact)
 - **Goal**: Record the "fact of usage" without complex stock management.
 - **Tasks**:
-  - [ ] Implement mechanism to log "Item X used" with a timestamp.
-  - [ ] UI: Add "Log Use" button to resource list.
-  - [ ] Build a simple history view for each item.
+  - [x] Implement mechanism to log "Item X used" with a timestamp.
+  - [x] UI: Add "Log Use" button to resource list.
+  - [x] Build a simple history view for each item.
 - **Definition of Done (DoD)**:
-  - [ ] Clicking "Log Use" creates a record in the fact table.
-  - [ ] Historical data is displayed chronologically.
-  - [ ] API End-to-End tests verify log persistence.
-  - [ ] **Deployment**: Updated and tested on the cluster.
+  - [x] Clicking "Log Use" creates a record in the fact table.
+  - [x] Historical data is displayed chronologically.
+  - [x] API End-to-End tests verify log persistence.
+  - [x] **Deployment**: Updated and tested on the cluster.
 
 ---
 

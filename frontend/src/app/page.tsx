@@ -51,7 +51,9 @@ export default function CRUDPage() {
         <section className="hidden md:flex md:flex-1 flex-col bg-zinc-50 dark:bg-zinc-950">
           <div className="flex-1 overflow-y-auto p-6">
             {selectedItemId ? (
-              <UsageFactsList itemId={selectedItemId} />
+              <UsageFactsList
+                shelfId={selectedShelfId}
+                itemId={selectedItemId} />
             ) : (
               <div className="flex items-center justify-center h-full text-zinc-500 text-sm italic">
                 Wybierz przedmiot z listy...

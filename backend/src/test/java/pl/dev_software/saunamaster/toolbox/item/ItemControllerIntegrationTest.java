@@ -9,13 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.dev_software.saunamaster.toolbox.model.Item;
-import pl.dev_software.saunamaster.toolbox.model.ItemFixture;
-import pl.dev_software.saunamaster.toolbox.model.Shelf;
-import pl.dev_software.saunamaster.toolbox.model.ShelfFixture;
+import pl.dev_software.saunamaster.toolbox.model.*;
 import pl.dev_software.saunamaster.toolbox.shelf.ShelfRepository;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -30,6 +28,8 @@ class ItemControllerIntegrationTest {
     private MockMvc mockMvc;
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    private UsageFactRepository usageFactRepository;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -340,6 +340,31 @@ class ItemControllerIntegrationTest {
         mockMvc.perform(
                         get("/shelves/{shelfId}/items/{itemId}", shelf.getId(), savedItem.getId())
                 )
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldDeleteSingleItemWithUsageFacts() throws Exception {
+        // Arrange
+        Item item = ItemFixture.anItemWithRandomName();
+        item.setShelf(shelf);
+        Item savedItem = itemRepository.saveAndFlush(item);
+        UsageFact usageFact = new UsageFact();
+        usageFact.setUsageTime(LocalDateTime.now());
+        usageFact.setItem(savedItem);
+        savedItem.getUsageFacts().add(usageFact);
+        usageFactRepository.saveAndFlush(usageFact);
+
+        // Act & Assert
+        mockMvc.perform(
+                        delete("/shelves/{shelfId}/items/{itemId}", shelf.getId(), savedItem.getId())
+                )
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(
+                        get("/shelves/{shelfId}/items/{itemId}", shelf.getId(), savedItem.getId())
+                )
+                .andDo(org.springframework.test.web.servlet.result.MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound());
     }
 
