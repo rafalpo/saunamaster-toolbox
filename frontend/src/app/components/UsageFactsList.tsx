@@ -3,8 +3,8 @@ import { useUsageFacts } from "../hooks/useUsageFacts";
 import { UsageFactListEntry } from "./UsageFactListEntry";
 
 interface UsageFactsListProps {
-    shelfId: string;
-    itemId: string;
+    shelfId: string | undefined;
+    itemId: string | undefined;
 };
 
 export default function UsageFactsList({ shelfId, itemId }: UsageFactsListProps) {

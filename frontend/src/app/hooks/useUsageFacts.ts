@@ -13,7 +13,7 @@ export interface UsageFactPagedResponse {
     number: number;
 };
 
-export const useUsageFacts = (shelfId: string, itemId: string, page: number = 0, limit: number = 25) => {
+export const useUsageFacts = (shelfId?: string, itemId?: string, page: number = 0, limit: number = 25) => {
     const queryClient = useQueryClient();
 
     const query = useSuspenseQuery<UsageFactPagedResponse>({

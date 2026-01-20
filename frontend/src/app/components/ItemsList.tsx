@@ -8,7 +8,7 @@ import ItemListEntry from "./ItemListEntry";
 
 interface ItemsListProps {
     shelfId: string;
-    activeItemId: string;
+    activeItemId: string | undefined;
     onSelectItem: (id: string | undefined) => void;
 }
 
