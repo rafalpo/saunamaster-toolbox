@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-usage-fact-table
+      author: rafalpo
+      changes:
+        - createTable:
+            tableName: usage_fact
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    unique: true
+                    nullable: false
+              - column:
+                  name: usage_time
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: FK_ITEM_ID
+                    referencedTableName: item
+                    referencedColumnNames: id
